@@ -1,5 +1,5 @@
 
-import { useEffect } from "react";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import BookingOptions from "@/components/BookingOptions";
@@ -9,6 +9,9 @@ import HotelCard from "@/components/HotelCard";
 import Footer from "@/components/Footer";
 
 const Index = () => {
+  // قسم التصنيفات
+  const [activeCategory, setActiveCategory] = useState("hotels");
+
   // Sample hotel data
   const hotels = [
     {
@@ -95,11 +98,51 @@ const Index = () => {
     },
   ];
 
+  // وظيفة لاختيار القسم النشط
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category);
+    
+    // التمرير إلى القسم المختار
+    const element = document.getElementById(category);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen arabic" dir="rtl">
-      <Navbar />
+      <Navbar siteName="محجوز" />
       <Hero />
       <BookingOptions />
+      
+      {/* قائمة الأقسام الرئيسية */}
+      <section className="bg-gray-100 py-8">
+        <div className="container mx-auto">
+          <div className="flex justify-center flex-wrap gap-4">
+            <CategoryButton 
+              active={activeCategory === "hotels"}
+              onClick={() => handleCategoryClick("hotels")}
+              icon="🏨"
+            >
+              فنادق واستراحات
+            </CategoryButton>
+            <CategoryButton 
+              active={activeCategory === "appointments"}
+              onClick={() => handleCategoryClick("appointments")}
+              icon="👨‍⚕️"
+            >
+              مواعيد طبية
+            </CategoryButton>
+            <CategoryButton 
+              active={activeCategory === "cars"}
+              onClick={() => handleCategoryClick("cars")}
+              icon="🚗"
+            >
+              تأجير سيارات
+            </CategoryButton>
+          </div>
+        </div>
+      </section>
       
       {/* Hotels Section */}
       <section className="py-16" id="hotels">
@@ -181,9 +224,9 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-6">عن منصة محبوز</h2>
+              <h2 className="text-3xl font-bold mb-6">عن منصة محجوز</h2>
               <p className="text-gray-700 mb-6 leading-relaxed">
-                "محبوز" هي منصة شاملة للحجوزات تنطلق من مدينة عدل في اليمن، تجمع بين خدمات حجز الفنادق والاستراحات، المواعيد الطبية، وتأجير السيارات في مكان واحد.
+                "محجوز" هي منصة شاملة للحجوزات تنطلق من مدينة عدل في اليمن، تجمع بين خدمات حجز الفنادق والاستراحات، المواعيد الطبية، وتأجير السيارات في مكان واحد.
               </p>
               <p className="text-gray-700 mb-6 leading-relaxed">
                 نسعى لتقديم تجربة حجز سلسة وسهلة الاستخدام معززة بالذكاء الاصطناعي والخرائط التفاعلية، مع أنظمة دفع آمنة ومتعددة الخيارات.
@@ -206,6 +249,23 @@ const Index = () => {
       <Footer />
       <Chatbot />
     </div>
+  );
+};
+
+// مكون زر التصنيف
+const CategoryButton = ({ children, active, onClick, icon }) => {
+  return (
+    <button 
+      className={`flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
+        active 
+        ? 'bg-primary text-white shadow-lg transform scale-105' 
+        : 'bg-white text-gray-700 hover:bg-gray-200'
+      }`}
+      onClick={onClick}
+    >
+      <span className="text-xl">{icon}</span>
+      {children}
+    </button>
   );
 };
 

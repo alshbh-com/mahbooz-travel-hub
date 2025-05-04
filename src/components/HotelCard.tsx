@@ -27,6 +27,14 @@ const HotelCard = ({
   amenities,
   label
 }: HotelCardProps) => {
+  // وظيفة لفتح الواتساب عند حجز
+  const handleBookNow = () => {
+    const whatsappNumber = "201204486263";
+    const message = `مرحباً، أود حجز ${name} في ${location}`;
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl">
       <div className="relative overflow-hidden h-56">
@@ -81,7 +89,7 @@ const HotelCard = ({
         <Button variant="ghost" size="sm" className="text-gray-500">
           تفاصيل أكثر
         </Button>
-        <Button>
+        <Button onClick={handleBookNow}>
           احجز الآن
           <ArrowRight className="mr-2 h-4 w-4" />
         </Button>

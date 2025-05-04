@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { 
   Sheet, 
@@ -8,11 +8,15 @@ import {
 } from "@/components/ui/sheet";
 import { Menu, User } from 'lucide-react';
 
-const Navbar = () => {
+interface NavbarProps {
+  siteName?: string;
+}
+
+const Navbar = ({ siteName = "محجوز" }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   // Add scroll event listener
-  useState(() => {
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
         setIsScrolled(true);
@@ -23,7 +27,7 @@ const Navbar = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  });
+  }, []);
 
   return (
     <header className={`fixed w-full z-50 transition-all duration-300 ${
@@ -32,7 +36,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            محبوز
+            {siteName}
           </span>
         </div>
         
@@ -51,7 +55,7 @@ const Navbar = () => {
             تأجير سيارات
           </a>
           <a href="#about" className="text-foreground hover:text-primary transition-colors">
-            عن محبوز
+            عن محجوز
           </a>
         </nav>
         
@@ -82,7 +86,7 @@ const Navbar = () => {
                     تأجير سيارات
                   </a>
                   <a href="#about" className="text-foreground hover:text-primary transition-colors py-2">
-                    عن محبوز
+                    عن محجوز
                   </a>
                 </div>
               </SheetContent>
