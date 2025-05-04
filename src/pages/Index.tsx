@@ -7,6 +7,7 @@ import Map from "@/components/Map";
 import Chatbot from "@/components/Chatbot";
 import HotelCard from "@/components/HotelCard";
 import Footer from "@/components/Footer";
+import FeaturedCategories from "@/components/FeaturedCategories";
 
 const Index = () => {
   // قسم التصنيفات
@@ -114,6 +115,9 @@ const Index = () => {
       <Navbar siteName="محجوز" />
       <Hero />
       <BookingOptions />
+      
+      {/* إضافة قسم الأقسام المميزة */}
+      <FeaturedCategories />
       
       {/* قائمة الأقسام الرئيسية */}
       <section className="bg-gray-100 py-8">

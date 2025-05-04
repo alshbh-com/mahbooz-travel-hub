@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-lg font-bold mb-4">محبوز</h3>
+            <h3 className="text-lg font-bold mb-4">محجوز</h3>
             <p className="text-gray-600 mb-4">
               منصة شاملة للحجوزات الفندقية، المواعيد الطبية، وتأجير السيارات برؤية عصرية.
             </p>
@@ -81,7 +81,7 @@ const Footer = () => {
         
         <div className="mt-12 pt-8 border-t border-gray-200 text-center">
           <p className="text-gray-500 text-sm">
-            &copy; 2025 محبوز. جميع الحقوق محفوظة.
+            &copy; 2025 محجوز. جميع الحقوق محفوظة.
           </p>
         </div>
       </div>
