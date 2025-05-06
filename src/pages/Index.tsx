@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import BookingOptions from "@/components/BookingOptions";
@@ -24,11 +23,25 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
 const Index = () => {
+  const location = useLocation();
+  
   // قسم الفنادق
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState([100, 500]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedRating, setSelectedRating] = useState<string | undefined>(undefined);
+
+  // استخدام معلومات URL لتحديد الدولة المختارة
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const countryParam = urlParams.get('country');
+    
+    if (countryParam) {
+      setSelectedCountries([countryParam]);
+    } else {
+      setSelectedCountries([]);
+    }
+  }, [location.search]);
 
   // بيانات الفنادق المعروضة
   const hotels = [
@@ -155,7 +168,7 @@ const Index = () => {
   // تطبيق الفلاتر على الفنادق
   const filteredHotels = hotels.filter(hotel => {
     const matchesPrice = hotel.price >= priceRange[0] && hotel.price <= priceRange[1];
-    const matchesCountry = selectedCountries.length === 0 || selectedCountries.includes(hotel.country);
+    const matchesCountry = selectedCountries.length === 0 || selectedCountries.includes(hotel.country.toLowerCase());
     const matchesRating = !selectedRating || hotel.rating >= parseFloat(selectedRating);
     
     return matchesPrice && matchesCountry && matchesRating;
@@ -253,9 +266,9 @@ const Index = () => {
                       {countries.map(country => (
                         <Badge 
                           key={country}
-                          variant={selectedCountries.includes(country) ? "default" : "outline"}
+                          variant={selectedCountries.includes(country.toLowerCase()) ? "default" : "outline"}
                           className="cursor-pointer"
-                          onClick={() => toggleCountryFilter(country)}
+                          onClick={() => toggleCountryFilter(country.toLowerCase())}
                         >
                           {country}
                         </Badge>
@@ -324,7 +337,9 @@ const Index = () => {
       <section className="py-16" id="hotels">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">فنادق مميزة</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              {selectedCountries.length > 0 ? `فنادق ${countries.find(c => c.toLowerCase() === selectedCountries[0])?.toString() || ''}` : 'فنادق مميزة'}
+            </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               اختر من بين مجموعة متنوعة من الفنادق الفاخرة والاقتصادية في مختلف المناطق
             </p>
@@ -399,7 +414,7 @@ const Index = () => {
               </div>
               <h3 className="text-xl font-bold mb-3">دعم فوري على مدار الساعة</h3>
               <p className="text-gray-600">
-                فريق دعم متخصص متواجد لمساعدتك على مدار الساعة عبر المساعد الذكي أو واتساب
+                فريق دعم متخصص متواجد لمساعدتك على مدار الساعة عبر المسا��د الذكي أو واتساب
               </p>
             </div>
           </div>

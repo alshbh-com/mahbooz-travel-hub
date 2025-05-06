@@ -8,8 +8,6 @@ import { SidebarWrapper } from "./components/Sidebar";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import HotelDetail from "./pages/HotelDetail";
-import DoctorDetail from "./pages/DoctorDetail";
-import CarDetail from "./pages/CarDetail";
 
 const queryClient = new QueryClient();
 
@@ -21,8 +19,6 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/hotels/:id" element={<HotelDetail />} />
-            <Route path="/doctors/:id" element={<DoctorDetail />} />
-            <Route path="/cars/:id" element={<CarDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
