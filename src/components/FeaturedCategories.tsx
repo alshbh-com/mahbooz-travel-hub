@@ -1,6 +1,6 @@
 
-import { Hotel, CalendarClock, Car, ChevronRight } from "lucide-react";
-import { useState, useEffect, useRef } from 'react';
+import { Hotel, Star, MapPin, Shield } from "lucide-react";
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 
@@ -60,8 +60,16 @@ const CategoryCard = ({
           href={href} 
           className="mt-4 inline-flex items-center text-primary font-medium"
         >
-          استعرض الخدمات
-          <ChevronRight className="mr-1 h-4 w-4 rtl:rotate-180" />
+          استعرض الفنادق
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-4 w-4 mr-1 rtl:rotate-180" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </a>
       </div>
       {active && (
@@ -74,7 +82,6 @@ const CategoryCard = ({
 const FeaturedCategories = () => {
   const [activeCategory, setActiveCategory] = useState("hotels");
   const navigate = useNavigate();
-  const categoriesRef = useRef<HTMLDivElement>(null);
   
   const handleCategoryClick = (categoryId: string) => {
     setActiveCategory(categoryId);
@@ -90,13 +97,13 @@ const FeaturedCategories = () => {
   const categories: CategoryProps[] = [
     {
       id: "hotels",
-      title: "فنادق واستراحات",
+      title: "فنادق فاخرة",
       icon: <Hotel size={32} className="text-white" />,
-      description: "اكتشف مجموعة متنوعة من الفنادق والاستراحات بأسعار مناسبة وخدمات متميزة",
+      description: "اكتشف مجموعة متنوعة من الفنادق الفاخرة من فئة 5 نجوم بأسعار مناسبة وخدمات متميزة",
       features: [
-        "حجز فوري بضمان أفضل الأسعار",
-        "عروض حصرية للمستخدمين",
-        "تصنيفات ومراجعات من النزلاء السابقين"
+        "أفضل المرافق والخدمات الفاخرة",
+        "فطور مجاني وخدمة الغرف على مدار الساعة",
+        "موقع متميز في قلب المدينة"
       ],
       href: "#hotels",
       color: "bg-primary",
@@ -104,74 +111,48 @@ const FeaturedCategories = () => {
       onClick: () => handleCategoryClick("hotels")
     },
     {
-      id: "appointments",
-      title: "مواعيد طبية",
-      icon: <CalendarClock size={32} className="text-white" />,
-      description: "احجز موعدك مع نخبة من الأطباء المتخصصين في مختلف المجالات الطبية",
+      id: "midrange",
+      title: "فنادق متوسطة",
+      icon: <Star size={32} className="text-white" />,
+      description: "خيارات اقتصادية مريحة بمواقع مميزة وخدمات أساسية ممتازة بأسعار معقولة",
       features: [
-        "أكثر من 150 طبيب متخصص",
-        "تذكير آلي قبل موعدك",
-        "استشارات طبية عن بعد"
+        "غرف مريحة ونظيفة",
+        "موقع جيد بالقرب من وسط المدينة",
+        "خدمة واي فاي مجانية ووجبة فطور"
       ],
-      href: "#appointments",
+      href: "#hotels",
       color: "bg-secondary",
-      active: activeCategory === "appointments",
-      onClick: () => handleCategoryClick("appointments")
+      active: activeCategory === "midrange",
+      onClick: () => handleCategoryClick("hotels")
     },
     {
-      id: "cars",
-      title: "تأجير سيارات",
-      icon: <Car size={32} className="text-white" />,
-      description: "استأجر سيارة تناسب احتياجاتك من مجموعة متنوعة من السيارات الاقتصادية والفاخرة",
+      id: "resorts",
+      title: "منتجعات واستراحات",
+      icon: <MapPin size={32} className="text-white" />,
+      description: "استمتع بإقامة مميزة في منتجعات فاخرة مع مناظر طبيعية خلابة وخدمات ترفيهية",
       features: [
-        "خيارات متنوعة من جميع الفئات",
-        "توصيل السيارة إلى موقعك",
-        "تأمين شامل وخدمة طوارئ 24/7"
+        "مسابح فاخرة ومناطق استجمام",
+        "أنشطة ترفيهية للعائلات والأطفال",
+        "مطاعم متنوعة وبوفيه مفتوح"
       ],
-      href: "#cars",
+      href: "#hotels",
       color: "bg-accent",
-      active: activeCategory === "cars",
-      onClick: () => handleCategoryClick("cars")
+      active: activeCategory === "resorts",
+      onClick: () => handleCategoryClick("hotels")
     }
   ];
   
-  // تأثير عند التمرير للأقسام
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.id;
-            setActiveCategory(id);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    const sections = document.querySelectorAll('#hotels, #appointments, #cars');
-    sections.forEach((section) => {
-      observer.observe(section);
-    });
-
-    return () => {
-      sections.forEach((section) => {
-        observer.unobserve(section);
-      });
-    };
-  }, []);
-  
   return (
-    <section className="py-16 bg-gradient-to-b from-gray-50 to-white" ref={categoriesRef}>
+    <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-3">
-            خدماتنا
+            أفضل الفنادق
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">خدماتنا المتميزة</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">أماكن إقامة متميزة</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            اختر من بين خدماتنا المتنوعة التي تلبي احتياجاتك من الفنادق والمواعيد الطبية وتأجير السيارات،
-            كل ذلك من خلال منصة واحدة سهلة الاستخدام
+            اختر من بين تشكيلة متنوعة من الفنادق الحاصلة على أعلى تقييمات من النزلاء،
+            مع خدمات استثنائية وأسعار منافسة
           </p>
         </div>
         
@@ -185,43 +166,54 @@ const FeaturedCategories = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <h3 className="text-2xl font-semibold mb-4">لماذا محجوز؟</h3>
+          <h3 className="text-2xl font-semibold mb-6">التزامنا تجاهك</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
-              <h4 className="text-lg font-medium mb-2">سهولة وسرعة الحجز</h4>
-              <p className="text-gray-600 text-sm">حجز سريع بخطوات بسيطة ودون تعقيدات، مع تأكيد فوري لحجزك</p>
+              <h4 className="text-lg font-medium mb-2">ضمان أفضل سعر</h4>
+              <p className="text-gray-600 text-sm">
+                نضمن لك الحصول على أفضل سعر ممكن مع خدماتنا، وإذا وجدت سعرًا أفضل سنعوضك الفرق
+              </p>
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
+                <Shield className="h-6 w-6 text-secondary" />
               </div>
-              <h4 className="text-lg font-medium mb-2">تعدد الخدمات في منصة واحدة</h4>
-              <p className="text-gray-600 text-sm">كل ما تحتاجه من حجوزات للفنادق والمواعيد الطبية وتأجير السيارات في مكان واحد</p>
+              <h4 className="text-lg font-medium mb-2">حجز آمن 100%</h4>
+              <p className="text-gray-600 text-sm">
+                بيانات الحجز والمعلومات الشخصية محمية بتقنيات تشفير متطورة تضمن أمان معلوماتك
+              </p>
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-sm">
               <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h4 className="text-lg font-medium mb-2">مساعدة ذكية في اتخاذ القرار</h4>
-              <p className="text-gray-600 text-sm">نظام ذكي يقدم لك توصيات مخصصة بناءً على تفضيلاتك واحتياجاتك</p>
+              <h4 className="text-lg font-medium mb-2">دعم سريع على مدار الساعة</h4>
+              <p className="text-gray-600 text-sm">
+                فريق متخصص متواجد لمساعدتك 24/7 عبر المساعد الذكي أو تواصل مباشر عبر واتساب
+              </p>
             </div>
           </div>
 
-          <div className="mt-10">
-            <Button className="mx-auto bg-primary text-white hover:bg-primary/90">
-              انطلاقة من عدن.. وانطلاقة نحو المستقبل!
+          <div className="mt-12">
+            <Button
+              onClick={() => document.getElementById('hotels')?.scrollIntoView({ behavior: 'smooth' })}
+              className="mx-auto bg-primary text-white hover:bg-primary/90 text-lg px-6 py-2"
+            >
+              استكشف جميع الفنادق المتاحة
             </Button>
+          </div>
+          
+          <div className="mt-8">
+            <p className="text-xl font-medium text-primary">انطلاقة من عدن.. وانطلاقة نحو المستقبل!</p>
           </div>
         </div>
       </div>
