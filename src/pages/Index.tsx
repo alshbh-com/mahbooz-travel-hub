@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -186,7 +185,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen arabic" dir="rtl">
-      <Navbar siteName="محجوز اليمن" />
+      <Navbar siteName="محجوز" />
       <Hero />
       <BookingOptions />
       
@@ -296,11 +295,11 @@ const Index = () => {
             <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {selectedCities.length > 0 
                 ? `فنادق ${cities.find(c => c.toLowerCase() === selectedCities[0])?.toString() || ''}`
-                : 'فنادق اليمن المميزة'
+                : 'فنادق مميزة'
               }
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              اختر من بين مجموعة متنوعة من الفنادق الفاخرة والاقتصادية في مختلف مدن اليمن
+              اختر من بين مجموعة متنوعة من الفنادق الفاخرة والاقتصادية في مختلف المدن
             </p>
           </div>
           
@@ -337,7 +336,7 @@ const Index = () => {
       <section className="py-16 bg-gradient-to-r from-primary/5 to-secondary/5" id="why-mahbooz">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">لماذا محجوز اليمن؟</h2>
+            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">لماذا محجوز؟</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               نقدم لك تجربة حجز فريدة تجمع بين سهولة الاستخدام والذكاء الاصطناعي والدعم الفوري
             </p>
@@ -383,8 +382,8 @@ const Index = () => {
 
           <div className="mt-16 text-center">
             <div className="inline-block bg-gradient-to-r from-primary to-secondary text-white rounded-lg shadow-lg p-6 mb-8 transform hover:scale-105 transition-transform duration-300">
-              <h3 className="text-2xl font-bold mb-2">انطلاقة من اليمن.. نحو آفاق السياحة!</h3>
-              <p>نهدف لتقديم أفضل خدمة حجوزات فندقية في اليمن</p>
+              <h3 className="text-2xl font-bold mb-2">انطلاقة واسعة.. نحو آفاق السياحة!</h3>
+              <p>نهدف لتقديم أفضل خدمة حجوزات فندقية</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12">
@@ -417,15 +416,15 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">عن منصة محجوز اليمن</h2>
+              <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">عن منصة محجوز</h2>
               <p className="text-gray-700 mb-6 leading-relaxed">
-                "محجوز اليمن" هي منصة شاملة للحجوزات الفندقية تنطلق من اليمن، تجمع خدمات حجز الفنادق والاستراحات في مكان واحد.
+                "محجوز" هي منصة شاملة للحجوزات الفندقية، تجمع خدمات حجز الفنادق والاستراحات في مكان واحد.
               </p>
               <p className="text-gray-700 mb-6 leading-relaxed">
                 نسعى لتقديم تجربة حجز سلسة وسهلة الاستخدام معززة بالذكاء الاصطناعي والخرائط التفاعلية، مع أنظمة دفع آمنة ومتعددة الخيارات.
               </p>
               <p className="text-gray-700 leading-relaxed">
-                رؤيتنا هي أن نصبح المنصة الأولى للحجوزات الفندقية في اليمن وتقديم خدمات سياحية متكاملة للزوار المحليين والدوليين.
+                رؤيتنا هي أن نصبح المنصة الأولى للحجوزات الفندقية وتقديم خدمات سياحية متكاملة للزوار المحليين والدوليين.
               </p>
               
               <div className="mt-8 flex flex-wrap gap-4">
