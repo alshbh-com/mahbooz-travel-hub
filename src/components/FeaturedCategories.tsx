@@ -1,7 +1,6 @@
 
 import { Hotel, Star, MapPin, Shield } from "lucide-react";
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 
 interface CategoryProps {
@@ -81,7 +80,6 @@ const CategoryCard = ({
 
 const FeaturedCategories = () => {
   const [activeCategory, setActiveCategory] = useState("hotels");
-  const navigate = useNavigate();
   
   const handleCategoryClick = (categoryId: string) => {
     setActiveCategory(categoryId);
