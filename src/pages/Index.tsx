@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import BookingOptions from "@/components/BookingOptions";
@@ -160,7 +161,9 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {hotels.map(hotel => (
-              <HotelCard key={hotel.id} {...hotel} />
+              <Link key={hotel.id} to={`/hotels/${hotel.id}`}>
+                <HotelCard {...hotel} />
+              </Link>
             ))}
           </div>
           
@@ -184,7 +187,9 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {specialists.map(specialist => (
-              <HotelCard key={specialist.id} {...specialist} />
+              <Link key={specialist.id} to={`/doctors/${specialist.id}`}>
+                <HotelCard key={specialist.id} {...specialist} />
+              </Link>
             ))}
           </div>
           
@@ -208,7 +213,9 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {cars.map(car => (
-              <HotelCard key={car.id} {...car} />
+              <Link key={car.id} to={`/cars/${car.id}`}>
+                <HotelCard key={car.id} {...car} />
+              </Link>
             ))}
           </div>
           
