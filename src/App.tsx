@@ -13,10 +13,8 @@ import CarDetail from "./pages/CarDetail";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipPrimitive.Provider>
-      <Toaster />
-      <Sonner />
+  <TooltipPrimitive.Provider>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -26,9 +24,11 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Toaster />
+        <Sonner />
       </BrowserRouter>
-    </TooltipPrimitive.Provider>
-  </QueryClientProvider>
+    </QueryClientProvider>
+  </TooltipPrimitive.Provider>
 );
 
 export default App;
