@@ -3,6 +3,9 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Star, Users, Calendar, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import BookingForm from "@/components/BookingForm";
 
 interface HotelCardProps {
   id: number;
@@ -27,13 +30,7 @@ const HotelCard = ({
   amenities,
   label
 }: HotelCardProps) => {
-  // وظيفة لفتح الواتساب عند حجز
-  const handleBookNow = () => {
-    const whatsappNumber = "201204486263";
-    const message = `مرحباً، أود حجز ${name} في ${location}`;
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-  };
+  const [showBookingForm, setShowBookingForm] = useState(false);
 
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl">
@@ -89,11 +86,25 @@ const HotelCard = ({
         <Button variant="ghost" size="sm" className="text-gray-500">
           تفاصيل أكثر
         </Button>
-        <Button onClick={handleBookNow}>
+        <Button onClick={() => setShowBookingForm(true)}>
           احجز الآن
           <ArrowRight className="mr-2 h-4 w-4" />
         </Button>
       </CardFooter>
+
+      <Dialog open={showBookingForm} onOpenChange={setShowBookingForm}>
+        <DialogContent className="sm:max-w-[500px]" dir="rtl">
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-center">
+              حجز {name}
+            </h2>
+            <BookingForm 
+              hotel={{id, name, location}} 
+              onClose={() => setShowBookingForm(false)} 
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
