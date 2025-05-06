@@ -18,6 +18,16 @@ interface Suggestion {
   onClick: () => void;
 }
 
+interface Hotel {
+  id: number;
+  name: string;
+  location: string;
+  price: number;
+  rating: number;
+  country: string;
+  image: string;
+}
+
 const Chatbot = () => {
   const [messages, setMessages] = useState([
     {
@@ -32,6 +42,100 @@ const Chatbot = () => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  // قائمة الفنادق (نستخدم نفس البيانات الموجودة في الموقع)
+  const hotels: Hotel[] = [
+    {
+      id: 1,
+      name: "فندق رويال الرياض",
+      location: "الرياض، السعودية",
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+      price: 350,
+      rating: 4.8,
+      country: "السعودية"
+    },
+    {
+      id: 2,
+      name: "برج الفيصلية للأجنحة الفندقية",
+      location: "جدة، السعودية",
+      image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b",
+      price: 420,
+      rating: 4.9,
+      country: "السعودية"
+    },
+    {
+      id: 3,
+      name: "فندق القمة",
+      location: "صنعاء، اليمن",
+      image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4",
+      price: 220,
+      rating: 4.6,
+      country: "اليمن"
+    },
+    {
+      id: 4,
+      name: "استراحة النخيل",
+      location: "عدن، اليمن",
+      image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa",
+      price: 180,
+      rating: 4.5,
+      country: "اليمن"
+    },
+    {
+      id: 5,
+      name: "فندق الماسة القاهرة",
+      location: "القاهرة، مصر",
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+      price: 280,
+      rating: 4.7,
+      country: "مصر"
+    },
+    {
+      id: 6,
+      name: "برج العرب",
+      location: "دبي، الإمارات",
+      image: "https://images.unsplash.com/photo-1590073844006-33379778ae09",
+      price: 950,
+      rating: 5.0,
+      country: "الإمارات"
+    },
+    {
+      id: 7,
+      name: "قصر الإمارات",
+      location: "أبو ظبي، الإمارات",
+      image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a",
+      price: 850,
+      rating: 4.9,
+      country: "الإمارات"
+    },
+    {
+      id: 8,
+      name: "مندرين أورينتال الدوحة",
+      location: "الدوحة، قطر",
+      image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+      price: 780,
+      rating: 4.8,
+      country: "قطر"
+    },
+    {
+      id: 9,
+      name: "فندق الشعلة الدوحة",
+      location: "الدوحة، قطر",
+      image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa",
+      price: 650,
+      rating: 4.7,
+      country: "قطر"
+    },
+    {
+      id: 10,
+      name: "فندق الجبل الأخضر",
+      location: "مسقط، عمان",
+      image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
+      price: 320,
+      rating: 4.6,
+      country: "عمان"
+    },
+  ];
+
   // التمرير التلقائي إلى آخر رسالة
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -44,6 +148,82 @@ const Chatbot = () => {
     const message = "مرحباً، أود التحدث مع فريق الدعم في محجوز";
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+  };
+
+  // وظيفة لاقتراح فنادق بناءً على ميزانية المستخدم والموقع
+  const recommendHotels = (budget: number, country?: string, rating?: number) => {
+    let filtered = hotels;
+    
+    // تصفية حسب الميزانية
+    if (budget) {
+      filtered = filtered.filter(hotel => hotel.price <= budget);
+    }
+    
+    // تصفية حسب البلد إذا تم تحديده
+    if (country) {
+      filtered = filtered.filter(hotel => 
+        hotel.country.includes(country) || 
+        hotel.location.includes(country)
+      );
+    }
+    
+    // تصفية حسب التقييم إذا تم تحديده
+    if (rating) {
+      filtered = filtered.filter(hotel => hotel.rating >= rating);
+    }
+    
+    // ترتيب النتائج حسب السعر (من الأرخص للأغلى)
+    filtered.sort((a, b) => a.price - b.price);
+    
+    // إرجاع 3 فنادق كحد أقصى
+    return filtered.slice(0, 3);
+  };
+
+  // تحليل طلب المستخدم لاستخراج الميزانية والموقع
+  const parseUserRequest = (text: string) => {
+    // استخراج الميزانية
+    const budgetMatch = text.match(/(\d+)\s*(ريال|دولار|$)/i);
+    const budget = budgetMatch ? parseInt(budgetMatch[1]) : undefined;
+    
+    // استخراج البلد
+    const countries = ["السعودية", "اليمن", "مصر", "الإمارات", "قطر", "عمان"];
+    let country;
+    
+    for (const c of countries) {
+      if (text.includes(c)) {
+        country = c;
+        break;
+      }
+    }
+    
+    // استخراج التقييم المطلوب
+    let rating;
+    if (text.includes("5 نجوم") || text.includes("خمس نجوم")) {
+      rating = 5;
+    } else if (text.includes("4 نجوم") || text.includes("أربع نجوم")) {
+      rating = 4;
+    }
+    
+    return { budget, country, rating };
+  };
+
+  // تحويل الفنادق المقترحة إلى نص رد
+  const formatHotelRecommendations = (recommendations: Hotel[]) => {
+    if (recommendations.length === 0) {
+      return "عذراً، لم أجد فنادق تناسب معاييرك. هل يمكنك توضيح ميزانيتك أو متطلباتك؟";
+    }
+    
+    let response = "إليك بعض الفنادق التي قد تناسبك:\n\n";
+    
+    recommendations.forEach((hotel, index) => {
+      response += `${index + 1}. ${hotel.name} (${hotel.location})\n`;
+      response += `   السعر: ${hotel.price} ريال في الليلة\n`;
+      response += `   التقييم: ${hotel.rating} ⭐\n\n`;
+    });
+    
+    response += "هل ترغب في معرفة المزيد عن أي من هذه الفنادق؟";
+    
+    return response;
   };
 
   const handleSendMessage = () => {
@@ -61,43 +241,52 @@ const Chatbot = () => {
     setIsTyping(true);
     setSuggestions([]);
 
-    // محاكاة رد المساعد الذكي (سيتم استبدالها بالذكاء الاصطناعي الفعلي في الإنتاج)
+    // محاكاة رد المساعد الذكي
     setTimeout(() => {
       let botReply = '';
       let newSuggestions: Suggestion[] = [];
       
-      // تحليل بسيط للكلمات المفتاحية (سيتم استبدالها بـ NLP متقدم في الإنتاج)
-      if (newMessage.includes('فندق') || newMessage.includes('حجز') || newMessage.includes('استراحة') || newMessage.includes('غرفة')) {
-        botReply = 'لدينا مجموعة واسعة من الفنادق والاستراحات في مختلف المناطق. هل تبحث عن منطقة محددة أو ميزانية معينة؟';
+      // تحليل الكلمات المفتاحية
+      if (newMessage.includes('فندق') || 
+          newMessage.includes('حجز') || 
+          newMessage.includes('ميزانية') || 
+          newMessage.includes('سعر') ||
+          newMessage.includes('ريال') ||
+          newMessage.includes('دولار')) {
         
-        newSuggestions = [
-          { 
-            text: 'فنادق في الرياض', 
-            onClick: () => handleSuggestionClick('أريد معلومات عن الفنادق المتاحة في الرياض')
-          },
-          { 
-            text: 'فنادق رخيصة', 
-            onClick: () => handleSuggestionClick('أبحث عن فنادق بأسعار اقتصادية')
-          },
-          { 
-            text: 'فنادق مع مسبح', 
-            onClick: () => handleSuggestionClick('أبحث عن فنادق توفر مسبح خاص')
-          }
-        ];
-      } 
-      else if (newMessage.includes('سعر') || newMessage.includes('تكلفة')) {
-        botReply = 'تختلف أسعار الفنادق حسب التصنيف والموقع والمواسم. هل هناك فندق محدد تريد معرفة سعره؟';
+        const { budget, country, rating } = parseUserRequest(newMessage);
         
-        newSuggestions = [
-          { 
-            text: 'فنادق 5 نجوم', 
-            onClick: () => handleSuggestionClick('ما هي أسعار فنادق الخمس نجوم؟')
-          },
-          { 
-            text: 'أرخص الفنادق', 
-            onClick: () => handleSuggestionClick('ما هي أرخص الفنادق المتاحة؟')
+        if (budget) {
+          const recommendations = recommendHotels(budget, country, rating);
+          botReply = formatHotelRecommendations(recommendations);
+          
+          // اقتراحات متابعة
+          if (recommendations.length > 0) {
+            recommendations.forEach(hotel => {
+              newSuggestions.push({
+                text: `معلومات عن ${hotel.name}`,
+                onClick: () => handleSuggestionClick(`أريد معرفة المزيد عن ${hotel.name}`)
+              });
+            });
           }
-        ];
+        } else {
+          botReply = "يمكنني مساعدتك في إيجاد فندق يناسب ميزانيتك. ما هي ميزانيتك التقريبية لليلة الواحدة؟";
+          
+          newSuggestions = [
+            { 
+              text: 'أقل من 200 ريال', 
+              onClick: () => handleSuggestionClick('أبحث عن فندق بميزانية 200 ريال')
+            },
+            { 
+              text: '200-500 ريال', 
+              onClick: () => handleSuggestionClick('أبحث عن فندق بميزانية 500 ريال')
+            },
+            { 
+              text: 'أكثر من 500 ريال', 
+              onClick: () => handleSuggestionClick('أبحث عن فندق فاخر بميزانية 1000 ريال')
+            }
+          ];
+        }
       } 
       else if (newMessage.includes('دعم') || newMessage.includes('مساعدة') || newMessage.includes('مشكلة')) {
         botReply = 'يمكنك التواصل مع فريق الدعم الفني عبر واتساب على مدار الساعة للحصول على المساعدة الفورية.';
@@ -113,16 +302,20 @@ const Chatbot = () => {
         botReply = 'نحن نقبل الدفع عبر بطاقات الائتمان والدفع الإلكتروني. كما يمكنك الدفع عند الوصول في بعض الفنادق.';
       } 
       else {
-        botReply = 'شكراً لتواصلك معنا! هل يمكنني مساعدتك في البحث عن فندق أو الإجابة عن أي استفسارات أخرى؟';
+        botReply = 'يمكنني مساعدتك في إيجاد فندق مناسب لميزانيتك واحتياجاتك. هل يمكنك إخباري بالميزانية التقريبية وأي متطلبات خاصة؟';
         
         newSuggestions = [
           { 
-            text: 'فنادق قريبة مني', 
-            onClick: () => handleSuggestionClick('أبحث عن فنادق قريبة من موقعي الحالي')
+            text: 'فنادق رخيصة', 
+            onClick: () => handleSuggestionClick('أبحث عن فندق رخيص بميزانية 200 ريال')
           },
           { 
-            text: 'عروض خاصة', 
-            onClick: () => handleSuggestionClick('هل لديكم عروض خاصة للحجوزات؟')
+            text: 'فنادق متوسطة', 
+            onClick: () => handleSuggestionClick('أبحث عن فندق متوسط بميزانية 400 ريال')
+          },
+          { 
+            text: 'فنادق فاخرة', 
+            onClick: () => handleSuggestionClick('أبحث عن فندق فاخر بميزانية 800 ريال')
           },
           { 
             text: 'التواصل مع الدعم', 
@@ -141,18 +334,6 @@ const Chatbot = () => {
       
       setMessages(prevMessages => [...prevMessages, botResponse]);
       setSuggestions(newSuggestions);
-      
-      // اقتراحات ذكية بناءً على تاريخ التصفح (محاكاة)
-      if (Math.random() > 0.5) {
-        setTimeout(() => {
-          const recommendationMessage = {
-            id: messages.length + 3,
-            type: 'bot',
-            text: 'بناءً على تفضيلاتك السابقة، قد تهتم بفندق القمة في الرياض. هل ترغب في معرفة المزيد عنه؟',
-          };
-          setMessages(prevMessages => [...prevMessages, recommendationMessage]);
-        }, 3000);
-      }
     }, 1500);
   };
 
@@ -211,7 +392,11 @@ const Chatbot = () => {
                       : 'bg-gray-100 text-gray-800 rounded-tl-none'
                   }`}
                 >
-                  {message.text}
+                  {message.text.split('\n').map((line, i) => (
+                    <div key={i} className={i > 0 ? 'mt-1' : ''}>
+                      {line}
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
