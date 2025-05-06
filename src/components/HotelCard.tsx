@@ -34,6 +34,12 @@ const HotelCard = ({
 }: HotelCardProps) => {
   const [showBookingForm, setShowBookingForm] = useState(false);
 
+  // Prevent default behavior to avoid scrolling
+  const handleBookingClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowBookingForm(true);
+  };
+
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl group border-0 shadow-md">
       <div className="relative overflow-hidden h-56">
@@ -98,7 +104,7 @@ const HotelCard = ({
             تفاصيل أكثر
           </Button>
           <Button 
-            onClick={() => setShowBookingForm(true)} 
+            onClick={handleBookingClick} 
             className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white rounded-none p-4 h-auto"
           >
             احجز الآن
@@ -108,7 +114,7 @@ const HotelCard = ({
       </CardFooter>
 
       <Dialog open={showBookingForm} onOpenChange={setShowBookingForm}>
-        <DialogContent className="sm:max-w-[500px]" dir="rtl">
+        <DialogContent className="sm:max-w-[500px] fixed top-1/2 -translate-y-1/2" dir="rtl">
           <div className="space-y-4">
             <h2 className="text-xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               حجز {name}
