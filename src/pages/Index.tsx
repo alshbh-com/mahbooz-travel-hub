@@ -9,7 +9,7 @@ import HotelCard from "@/components/HotelCard";
 import Footer from "@/components/Footer";
 import FeaturedCategories from "@/components/FeaturedCategories";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, ArrowDown, Star } from "lucide-react";
+import { ArrowDown, Star } from "lucide-react";
 import { 
   Select,
   SelectContent,
@@ -17,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -199,24 +198,16 @@ const Index = () => {
       {/* إضافة قسم الأقسام المميزة */}
       <FeaturedCategories />
       
-      {/* بحث وفلاتر متقدمة */}
+      {/* فلاتر متقدمة */}
       <section className="bg-gray-50 py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3 flex-grow">
-              <div className="relative flex-grow max-w-md">
-                <Input 
-                  placeholder="ابحث عن فندق..." 
-                  className="pl-10 pr-4 py-2"
-                />
-                <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-500" />
-              </div>
+            <div className="flex items-center gap-3 flex-grow flex-wrap">
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
                 className="flex items-center gap-2"
               >
-                <Filter className="h-4 w-4" />
                 <span>{showFilters ? "إخفاء الفلاتر" : "فلاتر البحث"}</span>
               </Button>
               <Select 
@@ -243,7 +234,7 @@ const Index = () => {
           {showFilters && (
             <Card className="mb-8">
               <CardContent className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="font-medium mb-4">نطاق السعر</h3>
                     <div className="flex items-center justify-between mb-2">
@@ -275,44 +266,14 @@ const Index = () => {
                       ))}
                     </div>
                   </div>
-                  
-                  <div>
-                    <h3 className="font-medium mb-4">المرافق</h3>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="flex items-center">
-                        <input type="checkbox" id="wifi" className="ml-2" />
-                        <label htmlFor="wifi">واي فاي</label>
-                      </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" id="pool" className="ml-2" />
-                        <label htmlFor="pool">مسبح</label>
-                      </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" id="parking" className="ml-2" />
-                        <label htmlFor="parking">موقف سيارات</label>
-                      </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" id="restaurant" className="ml-2" />
-                        <label htmlFor="restaurant">مطعم</label>
-                      </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" id="gym" className="ml-2" />
-                        <label htmlFor="gym">صالة رياضية</label>
-                      </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" id="spa" className="ml-2" />
-                        <label htmlFor="spa">سبا</label>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </CardContent>
             </Card>
           )}
           
           {/* التصنيف حسب التقييم */}
-          <div className="flex justify-center mb-8">
-            <div className="flex flex-wrap gap-2">
+          <div className="flex justify-center mb-8 overflow-x-auto py-2">
+            <div className="flex flex-nowrap gap-2 min-w-max">
               <Button variant="outline" className="bg-white" onClick={() => setSelectedRating(undefined)}>
                 جميع الفنادق
               </Button>
@@ -345,9 +306,9 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredHotels.map(hotel => (
-              <Link key={hotel.id} to={`/hotels/${hotel.id}`}>
+              <Link key={hotel.id} to={`/hotels/${hotel.id}`} className="transform hover:scale-105 transition-transform duration-300">
                 <HotelCard {...hotel} />
               </Link>
             ))}
@@ -414,7 +375,7 @@ const Index = () => {
               </div>
               <h3 className="text-xl font-bold mb-3">دعم فوري على مدار الساعة</h3>
               <p className="text-gray-600">
-                فريق دعم متخصص متواجد لمساعدتك على مدار الساعة عبر المسا��د الذكي أو واتساب
+                فريق دعم متخصص متواجد لمساعدتك على مدار الساعة عبر المساعد الذكي أو واتساب
               </p>
             </div>
           </div>
@@ -466,7 +427,7 @@ const Index = () => {
                 رؤيتنا هي أن نصبح المنصة الأولى للحجوزات في اليمن ثم التوسع إلى المملكة العربية السعودية والإمارات العربية المتحدة.
               </p>
               
-              <div className="mt-8 flex gap-4">
+              <div className="mt-8 flex flex-wrap gap-4">
                 <Button>تعرف علينا أكثر</Button>
                 <Button variant="outline">تواصل معنا</Button>
               </div>

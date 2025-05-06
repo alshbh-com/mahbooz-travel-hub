@@ -15,13 +15,16 @@ import {
   SidebarGroupContent,
   SidebarInset
 } from "@/components/ui/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function SidebarWrapper({ children }: { children: React.ReactNode }) {
+  const isMobile = useIsMobile();
+  
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={!isMobile}>
       <div className="flex min-h-svh w-full">
         <AppSidebar />
-        <SidebarInset>{children}</SidebarInset>
+        <SidebarInset className="w-full">{children}</SidebarInset>
       </div>
     </SidebarProvider>
   );
@@ -63,7 +66,7 @@ export function AppSidebar() {
   };
 
   return (
-    <ShadcnSidebar>
+    <ShadcnSidebar className="border-l border-gray-200 dark:border-gray-700">
       <SidebarContent>
         <div className="flex items-center p-4">
           <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">

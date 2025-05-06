@@ -33,9 +33,9 @@ const Navbar = ({ siteName = "محجوز" }: NavbarProps) => {
     <header className={`fixed w-full z-50 transition-all duration-300 ${
       isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md py-2' : 'bg-transparent py-4'
     }`}>
-      <div className="container mx-auto flex items-center justify-between">
+      <div className="container mx-auto px-4 flex items-center justify-between">
         <div className="flex items-center">
-          <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             {siteName}
           </span>
         </div>
@@ -47,12 +47,6 @@ const Navbar = ({ siteName = "محجوز" }: NavbarProps) => {
           </a>
           <a href="#hotels" className="text-foreground hover:text-primary transition-colors">
             الفنادق
-          </a>
-          <a href="#appointments" className="text-foreground hover:text-primary transition-colors">
-            المواعيد الطبية
-          </a>
-          <a href="#cars" className="text-foreground hover:text-primary transition-colors">
-            تأجير سيارات
           </a>
           <a href="#about" className="text-foreground hover:text-primary transition-colors">
             عن محجوز
@@ -73,19 +67,13 @@ const Navbar = ({ siteName = "محجوز" }: NavbarProps) => {
               </SheetTrigger>
               <SheetContent side="left" className="arabic">
                 <div className="mt-8 flex flex-col space-y-4">
-                  <a href="#" className="text-foreground hover:text-primary transition-colors py-2">
+                  <a href="#" className="text-foreground hover:text-primary transition-colors py-2 text-right text-lg">
                     الرئيسية
                   </a>
-                  <a href="#hotels" className="text-foreground hover:text-primary transition-colors py-2">
+                  <a href="#hotels" className="text-foreground hover:text-primary transition-colors py-2 text-right text-lg">
                     الفنادق
                   </a>
-                  <a href="#appointments" className="text-foreground hover:text-primary transition-colors py-2">
-                    المواعيد الطبية
-                  </a>
-                  <a href="#cars" className="text-foreground hover:text-primary transition-colors py-2">
-                    تأجير سيارات
-                  </a>
-                  <a href="#about" className="text-foreground hover:text-primary transition-colors py-2">
+                  <a href="#about" className="text-foreground hover:text-primary transition-colors py-2 text-right text-lg">
                     عن محجوز
                   </a>
                 </div>
