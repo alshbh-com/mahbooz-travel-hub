@@ -12,11 +12,19 @@ import {
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Users, MapPin, Search } from "lucide-react";
 import { cn } from '@/lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const BookingOptions = () => {
   const [date, setDate] = useState<Date>();
   const [checkoutDate, setCheckoutDate] = useState<Date>();
   const [activeTab, setActiveTab] = useState("hotels");
+  const [guestCount, setGuestCount] = useState("2");
 
   return (
     <div className="relative z-10 -mt-24 mb-24">
@@ -99,10 +107,17 @@ const BookingOptions = () => {
                 {/* Guests */}
                 <div className="space-y-2 md:col-span-2">
                   <label className="block text-sm font-medium">عدد الضيوف</label>
-                  <div className="relative">
-                    <Users className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <Input placeholder="عدد البالغين والأطفال" className="pr-10 text-right" />
-                  </div>
+                  <Select value={guestCount} onValueChange={setGuestCount}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="عدد البالغين والأطفال" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1 شخص</SelectItem>
+                      <SelectItem value="2">2 أشخاص</SelectItem>
+                      <SelectItem value="3">3 أشخاص</SelectItem>
+                      <SelectItem value="4">4+ أشخاص</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 
                 {/* Search button */}

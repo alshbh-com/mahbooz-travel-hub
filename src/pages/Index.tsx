@@ -28,7 +28,7 @@ const Index = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState([100, 500]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-  const [selectedRating, setSelectedRating] = useState<string>("");
+  const [selectedRating, setSelectedRating] = useState<string | undefined>(undefined);
 
   // بيانات الفنادق المعروضة
   const hotels = [
@@ -174,7 +174,7 @@ const Index = () => {
   const resetFilters = () => {
     setPriceRange([100, 500]);
     setSelectedCountries([]);
-    setSelectedRating("");
+    setSelectedRating(undefined);
   };
 
   return (
@@ -206,12 +206,15 @@ const Index = () => {
                 <Filter className="h-4 w-4" />
                 <span>{showFilters ? "إخفاء الفلاتر" : "فلاتر البحث"}</span>
               </Button>
-              <Select value={selectedRating} onValueChange={setSelectedRating}>
+              <Select 
+                value={selectedRating} 
+                onValueChange={(value) => setSelectedRating(value)}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="التقييم" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">جميع التقييمات</SelectItem>
+                  <SelectItem value="all">جميع التقييمات</SelectItem>
                   <SelectItem value="5">5 نجوم</SelectItem>
                   <SelectItem value="4.5">4.5+ نجوم</SelectItem>
                   <SelectItem value="4">4+ نجوم</SelectItem>
@@ -297,7 +300,7 @@ const Index = () => {
           {/* التصنيف حسب التقييم */}
           <div className="flex justify-center mb-8">
             <div className="flex flex-wrap gap-2">
-              <Button variant="outline" className="bg-white" onClick={() => setSelectedRating("")}>
+              <Button variant="outline" className="bg-white" onClick={() => setSelectedRating(undefined)}>
                 جميع الفنادق
               </Button>
               <Button variant="outline" className="bg-white" onClick={() => setSelectedRating("5")}>
