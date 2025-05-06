@@ -26,6 +26,15 @@ interface Hotel {
   rating: number;
   country: string;
   image: string;
+  features?: string[];
+  description?: string;
+  availability?: string;
+  amenities: string[];
+  roomTypes?: {
+    name: string;
+    price: number;
+    capacity: number;
+  }[];
 }
 
 const Chatbot = () => {
@@ -33,7 +42,7 @@ const Chatbot = () => {
     {
       id: 1,
       type: 'bot',
-      text: 'مرحباً بك في محجوز! كيف يمكنني مساعدتك اليوم؟',
+      text: 'مرحباً بك في محجوز! كيف يمكنني مساعدتك في العثور على فندق مناسب في اليمن؟',
     },
   ]);
   const [newMessage, setNewMessage] = useState('');
@@ -42,98 +51,148 @@ const Chatbot = () => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // قائمة الفنادق (نستخدم نفس البيانات الموجودة في الموقع)
+  // قائمة الفنادق اليمنية
   const hotels: Hotel[] = [
     {
       id: 1,
-      name: "فندق رويال الرياض",
-      location: "الرياض، السعودية",
-      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
-      price: 350,
-      rating: 4.8,
-      country: "السعودية"
-    },
-    {
-      id: 2,
-      name: "برج الفيصلية للأجنحة الفندقية",
-      location: "جدة، السعودية",
-      image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b",
-      price: 420,
-      rating: 4.9,
-      country: "السعودية"
-    },
-    {
-      id: 3,
-      name: "فندق القمة",
-      location: "صنعاء، اليمن",
+      name: "فندق القمة صنعاء",
+      location: "شارع الزبيري، صنعاء، اليمن",
       image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4",
       price: 220,
       rating: 4.6,
-      country: "اليمن"
+      country: "اليمن",
+      features: ["إطلالة على الجبال", "موقع مركزي", "بوفيه إفطار"],
+      description: "فندق فاخر في قلب صنعاء القديمة، يتميز بتصميم يجمع بين الأصالة اليمنية والخدمات العصرية",
+      availability: "متاح على مدار العام",
+      amenities: ["واي فاي", "مطعم", "موقف سيارات", "قاعة اجتماعات", "خدمة الغرف"],
+      roomTypes: [
+        { name: "غرفة قياسية", price: 220, capacity: 2 },
+        { name: "جناح ديلوكس", price: 350, capacity: 3 },
+        { name: "جناح فاخر", price: 450, capacity: 4 }
+      ]
     },
     {
-      id: 4,
-      name: "استراحة النخيل",
-      location: "عدن، اليمن",
+      id: 2,
+      name: "استراحة النخيل عدن",
+      location: "شارع الساحل، عدن، اليمن",
       image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa",
       price: 180,
       rating: 4.5,
-      country: "اليمن"
+      country: "اليمن",
+      features: ["إطلالة بحرية", "شاطئ خاص", "حدائق واسعة"],
+      description: "منتجع ساحلي هادئ بالقرب من شواطئ عدن، يوفر إقامة مريحة مع إطلالات خلابة على البحر",
+      availability: "متاح للحجز المسبق",
+      amenities: ["واي فاي", "مسبح", "مطعم", "قاعة اجتماعات", "مكان للشواء"],
+      roomTypes: [
+        { name: "غرفة عادية", price: 180, capacity: 2 },
+        { name: "غرفة عائلية", price: 280, capacity: 4 },
+        { name: "فيلا صغيرة", price: 380, capacity: 6 }
+      ]
+    },
+    {
+      id: 3,
+      name: "فندق قصر سبأ",
+      location: "منطقة الروضة، صنعاء، اليمن",
+      image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa",
+      price: 250,
+      rating: 4.7,
+      country: "اليمن",
+      features: ["تصميم تراثي", "أثاث تقليدي", "قاعة احتفالات"],
+      description: "فندق تراثي يعكس الثقافة اليمنية الأصيلة، مصمم على الطراز المعماري اليمني التقليدي",
+      availability: "متاح طوال السنة",
+      amenities: ["واي فاي", "مطعم تقليدي", "صالة شاي", "جلسات تراثية", "موقف سيارات"],
+      roomTypes: [
+        { name: "غرفة تراثية", price: 250, capacity: 2 },
+        { name: "جناح ملكي", price: 400, capacity: 4 }
+      ]
+    },
+    {
+      id: 4,
+      name: "منتجع الشاطئ الذهبي",
+      location: "خليج التواهي، عدن، اليمن",
+      image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
+      price: 300,
+      rating: 4.8,
+      country: "اليمن",
+      features: ["شاطئ خاص", "رياضات مائية", "مطل بانورامي"],
+      description: "منتجع فاخر على شاطئ البحر العربي، يوفر تجربة استجمام متكاملة مع خدمات راقية",
+      availability: "متاح بحجز مسبق",
+      amenities: ["واي فاي", "مسبح لانهائي", "سبا", "مطاعم متعددة", "نادي للأطفال", "رياضات مائية"],
+      roomTypes: [
+        { name: "غرفة بإطلالة بحرية", price: 300, capacity: 2 },
+        { name: "جناح شاطئي", price: 450, capacity: 3 },
+        { name: "فيلا على الماء", price: 600, capacity: 6 }
+      ]
     },
     {
       id: 5,
-      name: "فندق الماسة القاهرة",
-      location: "القاهرة، مصر",
-      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
-      price: 280,
-      rating: 4.7,
-      country: "مصر"
+      name: "فندق تراث حضرموت",
+      location: "وادي حضرموت، اليمن",
+      image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
+      price: 190,
+      rating: 4.5,
+      country: "اليمن",
+      features: ["غرف طينية تقليدية", "إطلالات على الوادي", "طعام محلي تقليدي"],
+      description: "فندق بناء تقليدي في قلب وادي حضرموت، يمنح الضيوف تجربة أصيلة للحياة الحضرمية",
+      availability: "متاح طوال السنة باستثناء موسم الأمطار",
+      amenities: ["واي فاي", "مطعم محلي", "جولات سياحية", "حديقة", "موقف سيارات"],
+      roomTypes: [
+        { name: "غرفة تقليدية", price: 190, capacity: 2 },
+        { name: "جناح عائلي", price: 280, capacity: 5 }
+      ]
     },
     {
       id: 6,
-      name: "برج العرب",
-      location: "دبي، الإمارات",
-      image: "https://images.unsplash.com/photo-1590073844006-33379778ae09",
-      price: 950,
-      rating: 5.0,
-      country: "الإمارات"
+      name: "فندق جزيرة سقطرى",
+      location: "جزيرة سقطرى، اليمن",
+      image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4",
+      price: 220,
+      rating: 4.4,
+      country: "اليمن",
+      features: ["قريب من الطبيعة", "جولات بيئية", "أجواء استوائية"],
+      description: "فندق بيئي فريد في جزيرة سقطرى الاستوائية، محاط بالنباتات النادرة والطبيعة الخلابة",
+      availability: "متاح في الموسم السياحي (أكتوبر-أبريل)",
+      amenities: ["واي فاي محدود", "وجبات محلية", "تنظيم رحلات استكشافية", "منطقة استرخاء"],
+      roomTypes: [
+        { name: "كوخ تقليدي", price: 220, capacity: 2 },
+        { name: "خيمة فاخرة", price: 300, capacity: 3 }
+      ]
     },
     {
       id: 7,
-      name: "قصر الإمارات",
-      location: "أبو ظبي، الإمارات",
-      image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a",
-      price: 850,
-      rating: 4.9,
-      country: "الإمارات"
+      name: "فندق باب اليمن",
+      location: "شارع الستين، صنعاء، اليمن",
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+      price: 210,
+      rating: 4.3,
+      country: "اليمن",
+      features: ["قريب من الأسواق التراثية", "تراس علوي", "مباني تاريخية"],
+      description: "فندق وسط المدينة القديمة، على بعد خطوات من باب اليمن الشهير والأسواق التقليدية",
+      availability: "متاح طوال السنة",
+      amenities: ["واي فاي", "مطعم", "جلسة سطح", "خدمة استقبال 24 ساعة", "موقف سيارات"],
+      roomTypes: [
+        { name: "غرفة اقتصادية", price: 210, capacity: 2 },
+        { name: "غرفة عائلية", price: 320, capacity: 4 }
+      ]
     },
     {
       id: 8,
-      name: "مندرين أورينتال الدوحة",
-      location: "الدوحة، قطر",
-      image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791",
-      price: 780,
-      rating: 4.8,
-      country: "قطر"
-    },
-    {
-      id: 9,
-      name: "فندق الشعلة الدوحة",
-      location: "الدوحة، قطر",
+      name: "منتجع جبل الشرق",
+      location: "تعز، اليمن",
       image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa",
-      price: 650,
-      rating: 4.7,
-      country: "قطر"
-    },
-    {
-      id: 10,
-      name: "فندق الجبل الأخضر",
-      location: "مسقط، عمان",
-      image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
-      price: 320,
+      price: 240,
       rating: 4.6,
-      country: "عمان"
-    },
+      country: "اليمن",
+      features: ["إطلالة جبلية", "هواء نقي", "بيئة هادئة"],
+      description: "منتجع جبلي هادئ يقع على ارتفاعات تعز، يوفر الهدوء والاسترخاء بعيدًا عن صخب المدينة",
+      availability: "متاح طوال السنة",
+      amenities: ["واي فاي", "مطعم", "حديقة", "تدفئة", "موقف سيارات"],
+      roomTypes: [
+        { name: "غرفة جبلية", price: 240, capacity: 2 },
+        { name: "شاليه خاص", price: 380, capacity: 4 },
+        { name: "جناح عائلي", price: 450, capacity: 6 }
+      ]
+    }
   ];
 
   // التمرير التلقائي إلى آخر رسالة
@@ -151,7 +210,7 @@ const Chatbot = () => {
   };
 
   // وظيفة لاقتراح فنادق بناءً على ميزانية المستخدم والموقع
-  const recommendHotels = (budget: number, country?: string, rating?: number) => {
+  const recommendHotels = (budget: number, location?: string, rating?: number, amenities?: string[]) => {
     let filtered = hotels;
     
     // تصفية حسب الميزانية
@@ -159,17 +218,23 @@ const Chatbot = () => {
       filtered = filtered.filter(hotel => hotel.price <= budget);
     }
     
-    // تصفية حسب البلد إذا تم تحديده
-    if (country) {
+    // تصفية حسب الموقع إذا تم تحديده
+    if (location) {
       filtered = filtered.filter(hotel => 
-        hotel.country.includes(country) || 
-        hotel.location.includes(country)
+        hotel.location.includes(location) 
       );
     }
     
     // تصفية حسب التقييم إذا تم تحديده
     if (rating) {
       filtered = filtered.filter(hotel => hotel.rating >= rating);
+    }
+    
+    // تصفية حسب وسائل الراحة إذا تم تحديدها
+    if (amenities && amenities.length > 0) {
+      filtered = filtered.filter(hotel => 
+        amenities.some(amenity => hotel.amenities.some(a => a.includes(amenity)))
+      );
     }
     
     // ترتيب النتائج حسب السعر (من الأرخص للأغلى)
@@ -179,19 +244,25 @@ const Chatbot = () => {
     return filtered.slice(0, 3);
   };
 
+  // البحث عن معلومات فندق محدد بالاسم
+  const getHotelInfo = (hotelName: string) => {
+    const hotel = hotels.find(h => h.name.includes(hotelName));
+    return hotel;
+  };
+
   // تحليل طلب المستخدم لاستخراج الميزانية والموقع
   const parseUserRequest = (text: string) => {
     // استخراج الميزانية
     const budgetMatch = text.match(/(\d+)\s*(ريال|دولار|$)/i);
     const budget = budgetMatch ? parseInt(budgetMatch[1]) : undefined;
     
-    // استخراج البلد
-    const countries = ["السعودية", "اليمن", "مصر", "الإمارات", "قطر", "عمان"];
-    let country;
+    // استخراج الموقع
+    const locations = ["صنعاء", "عدن", "تعز", "حضرموت", "سقطرى"];
+    let location;
     
-    for (const c of countries) {
-      if (text.includes(c)) {
-        country = c;
+    for (const loc of locations) {
+      if (text.includes(loc)) {
+        location = loc;
         break;
       }
     }
@@ -204,7 +275,14 @@ const Chatbot = () => {
       rating = 4;
     }
     
-    return { budget, country, rating };
+    // استخراج وسائل الراحة المطلوبة
+    const amenities = [];
+    if (text.includes("مسبح")) amenities.push("مسبح");
+    if (text.includes("واي فاي") || text.includes("انترنت")) amenities.push("واي فاي");
+    if (text.includes("إفطار") || text.includes("وجبة")) amenities.push("مطعم");
+    if (text.includes("سبا") || text.includes("منتجع صحي")) amenities.push("سبا");
+    
+    return { budget, location, rating, amenities };
   };
 
   // تحويل الفنادق المقترحة إلى نص رد
@@ -218,10 +296,48 @@ const Chatbot = () => {
     recommendations.forEach((hotel, index) => {
       response += `${index + 1}. ${hotel.name} (${hotel.location})\n`;
       response += `   السعر: ${hotel.price} ريال في الليلة\n`;
-      response += `   التقييم: ${hotel.rating} ⭐\n\n`;
+      response += `   التقييم: ${hotel.rating} ⭐\n`;
+      if (hotel.features) {
+        response += `   المميزات: ${hotel.features.join('، ')}\n`;
+      }
+      response += `\n`;
     });
     
     response += "هل ترغب في معرفة المزيد عن أي من هذه الفنادق؟";
+    
+    return response;
+  };
+
+  // تحويل معلومات فندق معين إلى نص رد
+  const formatHotelDetails = (hotel: Hotel) => {
+    if (!hotel) {
+      return "عذراً، لم أجد معلومات عن هذا الفندق. هل يمكنك توضيح اسم الفندق؟";
+    }
+    
+    let response = `معلومات عن ${hotel.name}:\n\n`;
+    response += `الموقع: ${hotel.location}\n`;
+    response += `السعر: يبدأ من ${hotel.price} ريال في الليلة\n`;
+    response += `التقييم: ${hotel.rating} ⭐\n\n`;
+    
+    if (hotel.description) {
+      response += `${hotel.description}\n\n`;
+    }
+    
+    response += `وسائل الراحة: ${hotel.amenities.join('، ')}\n\n`;
+    
+    if (hotel.roomTypes && hotel.roomTypes.length > 0) {
+      response += "أنواع الغرف:\n";
+      hotel.roomTypes.forEach(room => {
+        response += `- ${room.name}: ${room.price} ريال (تتسع لـ ${room.capacity} أشخاص)\n`;
+      });
+      response += "\n";
+    }
+    
+    if (hotel.availability) {
+      response += `التوافر: ${hotel.availability}\n\n`;
+    }
+    
+    response += "هل ترغب في حجز هذا الفندق أو معرفة المزيد عن الخدمات المتوفرة؟";
     
     return response;
   };
@@ -246,18 +362,56 @@ const Chatbot = () => {
       let botReply = '';
       let newSuggestions: Suggestion[] = [];
       
-      // تحليل الكلمات المفتاحية
-      if (newMessage.includes('فندق') || 
-          newMessage.includes('حجز') || 
-          newMessage.includes('ميزانية') || 
-          newMessage.includes('سعر') ||
-          newMessage.includes('ريال') ||
-          newMessage.includes('دولار')) {
+      // تحليل طلب المستخدم
+      const userText = newMessage.toLowerCase();
+      
+      // البحث عن معلومات فندق محدد
+      if (userText.includes('معلومات عن') || userText.includes('تفاصيل') || userText.includes('اخبرني عن')) {
+        // استخراج اسم الفندق من الرسالة
+        for (const hotel of hotels) {
+          if (userText.includes(hotel.name.toLowerCase()) || 
+              userText.includes(hotel.name.substring(0, 10).toLowerCase())) {
+            const hotelInfo = getHotelInfo(hotel.name);
+            botReply = formatHotelDetails(hotelInfo!);
+            
+            // اقتراحات متابعة
+            newSuggestions = [
+              { 
+                text: 'حجز هذا الفندق', 
+                onClick: () => handleSuggestionClick(`أريد حجز ${hotel.name}`)
+              },
+              { 
+                text: 'البحث عن فندق آخر', 
+                onClick: () => handleSuggestionClick('أريد فندق آخر')
+              }
+            ];
+            break;
+          }
+        }
         
-        const { budget, country, rating } = parseUserRequest(newMessage);
+        // إذا لم يتم العثور على اسم فندق محدد
+        if (!botReply) {
+          botReply = "هل يمكنك توضيح اسم الفندق الذي تريد معرفة المزيد عنه؟";
+          
+          // اقتراح بعض الفنادق
+          newSuggestions = hotels.slice(0, 3).map(hotel => ({
+            text: hotel.name,
+            onClick: () => handleSuggestionClick(`معلومات عن ${hotel.name}`)
+          }));
+        }
+      } 
+      // البحث عن فنادق بناءً على المعايير المحددة
+      else if (userText.includes('فندق') || 
+               userText.includes('حجز') || 
+               userText.includes('ميزانية') || 
+               userText.includes('سعر') ||
+               userText.includes('ريال') ||
+               userText.includes('دولار')) {
         
-        if (budget) {
-          const recommendations = recommendHotels(budget, country, rating);
+        const { budget, location, rating, amenities } = parseUserRequest(userText);
+        
+        if (budget || location || rating || (amenities && amenities.length > 0)) {
+          const recommendations = recommendHotels(budget || 1000, location, rating, amenities);
           botReply = formatHotelRecommendations(recommendations);
           
           // اقتراحات متابعة
@@ -270,7 +424,7 @@ const Chatbot = () => {
             });
           }
         } else {
-          botReply = "يمكنني مساعدتك في إيجاد فندق يناسب ميزانيتك. ما هي ميزانيتك التقريبية لليلة الواحدة؟";
+          botReply = "يمكنني مساعدتك في إيجاد فندق يناسب ميزانيتك في اليمن. ما هي ميزانيتك التقريبية لليلة الواحدة؟";
           
           newSuggestions = [
             { 
@@ -278,17 +432,68 @@ const Chatbot = () => {
               onClick: () => handleSuggestionClick('أبحث عن فندق بميزانية 200 ريال')
             },
             { 
-              text: '200-500 ريال', 
-              onClick: () => handleSuggestionClick('أبحث عن فندق بميزانية 500 ريال')
+              text: '200-300 ريال', 
+              onClick: () => handleSuggestionClick('أبحث عن فندق بميزانية 300 ريال')
             },
             { 
-              text: 'أكثر من 500 ريال', 
-              onClick: () => handleSuggestionClick('أبحث عن فندق فاخر بميزانية 1000 ريال')
+              text: 'أكثر من 300 ريال', 
+              onClick: () => handleSuggestionClick('أبحث عن فندق فاخر بميزانية 400 ريال')
             }
           ];
         }
       } 
-      else if (newMessage.includes('دعم') || newMessage.includes('مساعدة') || newMessage.includes('مشكلة')) {
+      // استفسارات حول المدن والمناطق
+      else if (userText.includes('صنعاء') || userText.includes('عدن') || 
+               userText.includes('تعز') || userText.includes('حضرموت') ||
+               userText.includes('سقطرى') || userText.includes('مدن')) {
+        
+        let location = '';
+        if (userText.includes('صنعاء')) location = 'صنعاء';
+        else if (userText.includes('عدن')) location = 'عدن';
+        else if (userText.includes('تعز')) location = 'تعز';
+        else if (userText.includes('حضرموت')) location = 'حضرموت';
+        else if (userText.includes('سقطرى')) location = 'سقطرى';
+        
+        if (location) {
+          const recommendations = recommendHotels(1000, location);
+          botReply = `إليك الفنادق المتاحة في ${location}:\n\n`;
+          botReply += formatHotelRecommendations(recommendations);
+        } else {
+          botReply = "نوفر فنادق في العديد من المدن اليمنية مثل صنعاء وعدن وتعز وحضرموت وجزيرة سقطرى. هل تبحث عن فندق في مدينة محددة؟";
+          
+          newSuggestions = [
+            { text: 'فنادق في صنعاء', onClick: () => handleSuggestionClick('فنادق في صنعاء') },
+            { text: 'فنادق في عدن', onClick: () => handleSuggestionClick('فنادق في عدن') },
+            { text: 'فنادق في تعز', onClick: () => handleSuggestionClick('فنادق في تعز') },
+          ];
+        }
+      }
+      // استفسارات حول المرافق والخدمات
+      else if (userText.includes('مسبح') || userText.includes('واي فاي') || 
+               userText.includes('مطعم') || userText.includes('سبا') ||
+               userText.includes('خدمات')) {
+        
+        let amenityRequest = [];
+        if (userText.includes('مسبح')) amenityRequest.push('مسبح');
+        if (userText.includes('واي فاي') || userText.includes('انترنت')) amenityRequest.push('واي فاي');
+        if (userText.includes('مطعم') || userText.includes('طعام')) amenityRequest.push('مطعم');
+        if (userText.includes('سبا')) amenityRequest.push('سبا');
+        
+        if (amenityRequest.length > 0) {
+          const recommendations = recommendHotels(1000, undefined, undefined, amenityRequest);
+          botReply = `إليك الفنادق التي توفر ${amenityRequest.join(' و ')}:\n\n`;
+          botReply += formatHotelRecommendations(recommendations);
+        } else {
+          botReply = "توفر فنادقنا مجموعة متنوعة من المرافق مثل المسابح والواي فاي والمطاعم والسبا. هل تبحث عن خدمة معينة؟";
+          
+          newSuggestions = [
+            { text: 'فنادق مع مسبح', onClick: () => handleSuggestionClick('فنادق بها مسبح') },
+            { text: 'فنادق مع واي فاي', onClick: () => handleSuggestionClick('فنادق تقدم واي فاي') },
+            { text: 'فنادق مع مطاعم', onClick: () => handleSuggestionClick('فنادق بها مطاعم') },
+          ];
+        }
+      }
+      else if (userText.includes('دعم') || userText.includes('مساعدة') || userText.includes('مشكلة')) {
         botReply = 'يمكنك التواصل مع فريق الدعم الفني عبر واتساب على مدار الساعة للحصول على المساعدة الفورية.';
         
         newSuggestions = [
@@ -298,11 +503,19 @@ const Chatbot = () => {
           }
         ];
       } 
-      else if (newMessage.includes('دفع') || newMessage.includes('بطاقة') || newMessage.includes('حساب')) {
+      else if (userText.includes('دفع') || userText.includes('بطاقة') || userText.includes('حساب')) {
         botReply = 'نحن نقبل الدفع عبر بطاقات الائتمان والدفع الإلكتروني. كما يمكنك الدفع عند الوصول في بعض الفنادق.';
+        
+        newSuggestions = [
+          { 
+            text: 'معرفة المزيد عن طرق الدفع', 
+            onClick: () => handleSuggestionClick('كيف يمكنني الدفع؟')
+          }
+        ];
       } 
+      // إذا لم يتطابق مع أي من الحالات السابقة
       else {
-        botReply = 'يمكنني مساعدتك في إيجاد فندق مناسب لميزانيتك واحتياجاتك. هل يمكنك إخباري بالميزانية التقريبية وأي متطلبات خاصة؟';
+        botReply = 'يمكنني مساعدتك في إيجاد فندق مناسب في اليمن. هل يمكنك إخباري بميزانيتك التقريبية والمدينة التي تريد الإقامة فيها؟';
         
         newSuggestions = [
           { 
@@ -311,11 +524,11 @@ const Chatbot = () => {
           },
           { 
             text: 'فنادق متوسطة', 
-            onClick: () => handleSuggestionClick('أبحث عن فندق متوسط بميزانية 400 ريال')
+            onClick: () => handleSuggestionClick('أبحث عن فندق متوسط بميزانية 300 ريال')
           },
           { 
             text: 'فنادق فاخرة', 
-            onClick: () => handleSuggestionClick('أبحث عن فندق فاخر بميزانية 800 ريال')
+            onClick: () => handleSuggestionClick('أبحث عن فندق فاخر بميزانية 400 ريال')
           },
           { 
             text: 'التواصل مع الدعم', 
@@ -362,7 +575,7 @@ const Chatbot = () => {
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button 
-            className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
+            className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90"
             size="icon"
           >
             <MessageCircle className="h-6 w-6" />
@@ -370,7 +583,7 @@ const Chatbot = () => {
         </SheetTrigger>
         <SheetContent side="right" className="w-[90%] sm:w-[400px] h-[600px] max-h-[90vh] flex flex-col">
           <SheetHeader>
-            <SheetTitle className="text-right arabic">المساعد الذكي</SheetTitle>
+            <SheetTitle className="text-right arabic">المساعد الذكي - محجوز اليمن</SheetTitle>
             <div className="flex gap-2 justify-end">
               <Button variant="outline" size="sm" onClick={openWhatsApp} className="flex items-center gap-2">
                 <Phone className="h-4 w-4" />
@@ -388,7 +601,7 @@ const Chatbot = () => {
                 <div 
                   className={`px-4 py-2 rounded-lg max-w-[80%] ${
                     message.type === 'user' 
-                      ? 'bg-primary text-white rounded-tr-none' 
+                      ? 'bg-gradient-to-r from-primary to-secondary text-white rounded-tr-none' 
                       : 'bg-gray-100 text-gray-800 rounded-tl-none'
                   }`}
                 >
@@ -421,7 +634,7 @@ const Chatbot = () => {
                     variant="outline" 
                     size="sm" 
                     onClick={suggestion.onClick}
-                    className="bg-gray-50"
+                    className="bg-gray-50 hover:bg-gray-100"
                   >
                     {suggestion.text}
                   </Button>
@@ -442,7 +655,11 @@ const Chatbot = () => {
                 placeholder="اكتب رسالتك هنا..."
                 className="arabic"
               />
-              <Button size="icon" onClick={handleSendMessage} className="shrink-0">
+              <Button 
+                size="icon" 
+                onClick={handleSendMessage} 
+                className="shrink-0 bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+              >
                 <Send className="h-4 w-4" />
               </Button>
             </div>
